@@ -1,0 +1,20 @@
+# Installed npm packages
+node_modules/
+
+# Compiled JavaScript
+dist/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Log files
+*.log
+npm-debug.log*
+
+# macOS metadata
+.DS_Store
+
+# VS Code machine-specific settings
+.vscode/
