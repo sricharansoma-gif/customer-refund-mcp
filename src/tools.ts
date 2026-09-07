@@ -6,6 +6,7 @@ interface TextContent {
 }
 
 export interface ToolResult {
+  [key: string]: unknown;
   content: [TextContent];
   isError?: true;
 }
