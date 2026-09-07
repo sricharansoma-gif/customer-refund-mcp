@@ -1,11 +1,14 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 
-import { customers } from "./data.js";
 import {
   getCustomerRecordInputSchema,
   triggerRefundInputSchema,
 } from "./schemas.js";
+import {
+  handleGetCustomerRecord,
+  handleTriggerRefund,
+} from "./tools.js";
 
 function createServer(): McpServer {
   const server = new McpServer({
@@ -17,83 +20,18 @@ function createServer(): McpServer {
     "get_customer_record",
     {
       description: "Retrieve a customer record using a customer ID",
-      inputSchema: getCustomerRecordInputSchema,
+      inputSchema: getCustomerRecordInputSchema.shape,
     },
-    async ({ customer_id }) => {
-      console.error(`Looking up customer ${customer_id}`);
-
-      const customer = customers[customer_id];
-
-      if (!customer) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                error: "CUSTOMER_NOT_FOUND",
-                message: `No customer exists with ID ${customer_id}`,
-              }),
-            },
-          ],
-          isError: true,
-        };
-      }
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(customer),
-          },
-        ],
-      };
-    },
+    handleGetCustomerRecord,
   );
 
   server.registerTool(
     "trigger_refund",
     {
       description: "Process a mock refund for an existing customer",
-      inputSchema: triggerRefundInputSchema,
+      inputSchema: triggerRefundInputSchema.shape,
     },
-    async ({ customer_id, amount, reason }) => {
-      console.error(`Processing mock refund for ${customer_id}`);
-
-      const customer = customers[customer_id];
-
-      if (!customer) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                error: "CUSTOMER_NOT_FOUND",
-                message: `No customer exists with ID ${customer_id}`,
-              }),
-            },
-          ],
-          isError: true,
-        };
-      }
-
-      const refund = {
-        refundId: `REF-${Date.now()}`,
-        customerId: customer_id,
-        amount,
-        reason,
-        status: "processed",
-        processedAt: new Date().toISOString(),
-      };
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(refund),
-          },
-        ],
-      };
-    },
+    handleTriggerRefund,
   );
 
   return server;
