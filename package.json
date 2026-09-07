@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx src/server.ts",
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "start": "node dist/server.js",
     "test": "tsx --test tests/*.test.ts"
   },
