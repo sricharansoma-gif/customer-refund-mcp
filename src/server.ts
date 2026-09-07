@@ -20,7 +20,7 @@ function createServer(): McpServer {
     "get_customer_record",
     {
       description: "Retrieve a customer record using a customer ID",
-      inputSchema: getCustomerRecordInputSchema,
+      inputSchema: getCustomerRecordInputSchema.shape,
     },
     handleGetCustomerRecord,
   );
@@ -29,7 +29,7 @@ function createServer(): McpServer {
     "trigger_refund",
     {
       description: "Process a mock refund for an existing customer",
-      inputSchema: triggerRefundInputSchema,
+      inputSchema: triggerRefundInputSchema.shape,
     },
     handleTriggerRefund,
   );
